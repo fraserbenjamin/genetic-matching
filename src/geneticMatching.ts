@@ -8,12 +8,19 @@ class GeneticMatching {
     private graduateMaxRankings: number;
     private placementMaxRankings: number;
 
-    constructor(_graduatePreferences: IGraduatePreference[], _placements: IPlacement[]) {
+    private managerWeighting: number;
+
+    constructor(_graduatePreferences: IGraduatePreference[], _placements: IPlacement[], _managerWeighting: number = 100) {
         this.graduatePreferences = _graduatePreferences;
         this.placements = _placements;
+        this.managerWeighting = _managerWeighting;
 
         this.graduateMaxRankings = 10;
         this.placementMaxRankings = 10;
+    }
+
+    setManagerWeighting(weighting: number) {
+        this.managerWeighting = weighting;
     }
 
     // Generates a random viable solution of placement matches
@@ -38,8 +45,10 @@ class GeneticMatching {
     }
 
     // Takes a solution and scores it based on how well the placements match
+    // You can also enter a percentage of how much the manager's preferences matter
     calculateFitness(solution: TMatching): number {
-        let fitness: number = 0;
+        let graduateFitness: number = 0;
+        let placementFitness: number = 0;
 
         solution.forEach((placementId: number, graduateId: number) => {
             const graduate: IGraduatePreference | undefined = this.graduatePreferences.find((g: IGraduatePreference) => g.id === graduateId);
@@ -48,15 +57,24 @@ class GeneticMatching {
             if (graduate && placement) {
                 // For the placement reverse the graduate rankings so the earlier the item is found the lower the score that is given
                 const placementRanking: number = placement.graduateRankings.indexOf(graduate.id);
-                if (placementRanking > -1) fitness += this.placementMaxRankings - placementRanking;
+                if (placementRanking > -1) placementFitness += this.placementMaxRankings - placementRanking;
 
                 // For the graduate reverse the placement rankings so the earlier the item is found the lower the score that is given
                 const graduateRanking: number = graduate.placementRankings.indexOf(placement.id);
-                if (graduateRanking > -1) fitness += this.graduateMaxRankings - graduateRanking;
+                if (graduateRanking > -1) graduateFitness += this.graduateMaxRankings - graduateRanking;
             }
         });
 
-        return fitness;
+        // Factor the manager waiting into the fitness score
+        if(typeof this.managerWeighting === "number" && this.managerWeighting >= 0 && this.managerWeighting <= 100) {
+            if(this.managerWeighting === 0) {
+                placementFitness = 0;
+            } else {
+                placementFitness = placementFitness * (this.managerWeighting / 100);
+            }
+        }
+
+        return graduateFitness + placementFitness;
     }
 
     sortPopulation(population: IChromosome[]): IChromosome[] {

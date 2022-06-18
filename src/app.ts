@@ -32,7 +32,7 @@ const placements: IPlacement[] = [
     },
     {
         id: 2,
-        graduateRankings: [],
+        graduateRankings: [4],
         quota: 2,
     },
     {
@@ -50,6 +50,6 @@ const placements: IPlacement[] = [
 
 const gm = new GeneticMatching(graduatePreferences, placements);
 
-let result = gm.run(10, 100);
+let result = gm.run(1, 10);
 console.log(result);
 gm.evaluate(result.solution);

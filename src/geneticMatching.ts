@@ -139,11 +139,11 @@ class GeneticMatching {
             }
         });
 
-        console.log(`Graduates with their first choice: ${graduateFirstChoice}`);
-        console.log(`Graduates with one of their top 3 choices: ${graduateTop3}`);
+        console.log(`Graduates with their first choice: ${graduateFirstChoice}/${this.graduatePreferences.length}`);
+        console.log(`Graduates with one of their top 3 choices: ${graduateTop3}/${this.graduatePreferences.length}`);
 
-        console.log(`Managers with their first choice: ${managerFirstChoice}`);
-        console.log(`Managers with one of their top 3 choices: ${managerTop3}`);
+        console.log(`Managers with their first choice: ${managerFirstChoice}/${this.placements.length}}`);
+        console.log(`Managers with one of their top 3 choices: ${managerTop3}/${this.placements.length}`);
     }
 }
 

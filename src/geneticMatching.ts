@@ -82,7 +82,7 @@ class GeneticMatching {
         return chromosome;
     }
 
-    run(iterations: number, populationSize?: number, keep?: number): TMatching {
+    run(iterations: number, populationSize?: number, keep?: number): IChromosome {
         if (!populationSize) populationSize = 10;
         if (!keep) keep = Math.ceil(populationSize * 0.05) + 1; // Keep best ~5% of the population
 
@@ -112,12 +112,38 @@ class GeneticMatching {
             }
 
             // Keep array to fixed size
-            newPopulation = newPopulation.slice(0, populationSize);
-            console.log(newPopulation);
+            population = newPopulation.slice(0, populationSize);
         }
 
 
-        return new Map();
+        return population[0];
+    }
+
+    evaluate(solution: TMatching): void {
+        let graduateFirstChoice: number = 0;
+        let graduateTop3: number = 0;
+
+        let managerFirstChoice: number = 0;
+        let managerTop3: number = 0;
+
+        solution.forEach((placementId: number, graduateId: number) => {
+            const graduate: IGraduatePreference | undefined = this.graduatePreferences.find((g: IGraduatePreference) => g.id === graduateId);
+            const placement: IPlacement | undefined = this.placements.find((p: IPlacement) => p.id === placementId);
+
+            if (graduate && placement) {
+                if(graduate.placementRankings[0] === placementId) graduateFirstChoice++;
+                if(graduate.placementRankings.slice(0,2).includes(placementId)) graduateTop3++;
+
+                if(placement.graduateRankings[0] === graduateId) managerFirstChoice++;
+                if(placement.graduateRankings.slice(0,2).includes(graduateId)) managerTop3++;
+            }
+        });
+
+        console.log(`Graduates with their first choice: ${graduateFirstChoice}`);
+        console.log(`Graduates with one of their top 3 choices: ${graduateTop3}`);
+
+        console.log(`Managers with their first choice: ${managerFirstChoice}`);
+        console.log(`Managers with one of their top 3 choices: ${managerTop3}`);
     }
 }
 

@@ -36,10 +36,6 @@ const placements: IPlacement[] = [
 
 const gm = new GeneticMatching(graduatePreferences, placements);
 
-let randomSolution = gm.generateRandomSolution();
-console.log(randomSolution);
-
-let fitness = gm.calculateFitness(randomSolution);
-console.log(fitness);
-
-gm.run(10, 10);
+let result = gm.run(100, 10);
+console.log(result);
+gm.evaluate(result.solution);

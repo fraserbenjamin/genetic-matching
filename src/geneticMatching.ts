@@ -243,6 +243,7 @@ class GeneticMatching {
 
         // Run for each of the required iterations, more iterations = more accurate results
         for (let i = 0; i < iterations; i++) {
+            if(iterations > 1000 && i > 0 && i % 1000 === 0) console.log(`Iteration ${i}`);
             // Sort the population by fitness
             let sortedPopulation: IChromosome[] = this.sortPopulation(population);
             // Keep the best solutions
@@ -253,14 +254,14 @@ class GeneticMatching {
 
             while (newPopulation.length < populationSize) {
                 // Crossover
-                if (Math.random() < 0.6) {
+                if (Math.random() < 0.3) {
                     const crossoverResult = this.crossover(choice1, choice2);
                     choice1 = crossoverResult[0];
                     choice2 = crossoverResult[1];
                 }
 
                 // Mutation
-                if (Math.random() < 0.4) {
+                if (Math.random() < 0.6) {
                     choice1 = this.mutation(choice1);
                     choice2 = this.mutation(choice2);
                 }

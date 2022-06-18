@@ -49,7 +49,11 @@ const placements: IPlacement[] = [
 
 
 const gm = new GeneticMatching(graduatePreferences, placements);
+gm.setManagerWeighting(50);
 
-let result = gm.run(1, 10);
+console.time("run");
+let result = gm.run(1000, 100);
+console.timeEnd("run");
+
 console.log(result);
 gm.evaluate(result.solution);

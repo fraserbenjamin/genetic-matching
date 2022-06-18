@@ -41,3 +41,5 @@ console.log(randomSolution);
 
 let fitness = gm.calculateFitness(randomSolution);
 console.log(fitness);
+
+gm.run(10, 10);

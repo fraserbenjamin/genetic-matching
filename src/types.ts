@@ -10,3 +10,8 @@ interface IPlacement {
 }
 
 type TMatching = Map<number, number>;
+
+interface IChromosome {
+    solution: TMatching;
+    fitness: number;
+}

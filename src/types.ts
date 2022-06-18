@@ -1,17 +1,22 @@
-interface IGraduatePreference {
+export interface IGraduatePreference {
     id: number;
     placementRankings: number[];
 }
 
-interface IPlacement {
+export interface IPlacement {
     id: number;
     graduateRankings: number[];
     quota: number;
 }
 
-type TMatching = Map<number, number>;
+export type TMatching = Map<number, number>;
 
-interface IChromosome {
+export interface IChromosome {
     solution: TMatching;
     fitness: number;
+}
+
+export interface IPairing {
+    graduate: number;
+    placement: number;
 }

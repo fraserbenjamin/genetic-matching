@@ -1,4 +1,4 @@
-import { IChromosome, IGraduatePreference, IPairing, IPlacement, TMatching } from "types";
+import { IChromosome, IGraduatePreference, IPairing, IPlacement, TMatching } from "../types";
 import { randomNumber, shuffle } from "./util";
 
 class GeneticMatching {

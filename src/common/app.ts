@@ -1,4 +1,4 @@
-import { IGraduatePreference, IPlacement } from "./types";
+import { IGraduatePreference, IPlacement } from "../types";
 import GeneticMatching from "./geneticMatching";
 
 const graduatePreferences: IGraduatePreference[] = [

@@ -227,7 +227,8 @@ class GeneticMatching {
         };
     }
 
-    run(iterations: number, populationSize?: number): IChromosome {
+    run(iterations: number, populationSize?: number, onProgress?: (progress: number) => void): IChromosome {
+        // console.log(`Starting genetic algorithm with ${iterations} iterations and ${populationSize} population size`);
         if (!populationSize) populationSize = 10;
         const keep = 2; // Keep best of the population
 
@@ -242,8 +243,10 @@ class GeneticMatching {
         }
 
         // Run for each of the required iterations, more iterations = more accurate results
-        for (let i = 0; i < iterations; i++) {
-            if(iterations > 1000 && i > 0 && i % 1000 === 0) console.log(`Iteration ${i}`);
+        for (let i = 1; i <= iterations; i++) {
+            const progress: number = (i / iterations) * 100;
+            if(onProgress && progress % 1 === 0) onProgress(progress);
+
             // Sort the population by fitness
             let sortedPopulation: IChromosome[] = this.sortPopulation(population);
             // Keep the best solutions

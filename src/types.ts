@@ -20,3 +20,15 @@ export interface IPairing {
     graduate: number;
     placement: number;
 }
+
+export interface IPreview {
+    csv: string;
+    json: any[];
+    name: string;
+}
+
+export interface IConfig {
+    populationSize: number;
+    iterations: number;
+    managerWeighting: number;
+}

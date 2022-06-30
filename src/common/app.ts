@@ -1,7 +1,7 @@
 import { IGraduatePreference, IPlacement } from "../types";
 import GeneticMatching from "./geneticMatching";
 
-const graduatePreferences: IGraduatePreference[] = [
+export const graduatePreferences: IGraduatePreference[] = [
     {
         id: 1,
         placementRankings: [2, 1, 3],
@@ -24,7 +24,7 @@ const graduatePreferences: IGraduatePreference[] = [
     },
 ];
 
-const placements: IPlacement[] = [
+export const placements: IPlacement[] = [
     {
         id: 1,
         graduateRankings: [3],
@@ -48,12 +48,12 @@ const placements: IPlacement[] = [
 ];
 
 
-const gm = new GeneticMatching(graduatePreferences, placements);
-gm.setManagerWeighting(50);
+// const gm = new GeneticMatching(graduatePreferences, placements);
+// gm.setManagerWeighting(50);
 
-console.time("run");
-let result = gm.run(1000, 100);
-console.timeEnd("run");
+// console.time("run");
+// let result = gm.run(1000, 100);
+// console.timeEnd("run");
 
-console.log(result);
-gm.evaluate(result.solution);
+// console.log(result);
+// gm.evaluate(result.solution);

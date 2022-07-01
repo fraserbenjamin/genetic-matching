@@ -281,7 +281,9 @@ class GeneticMatching {
         return population[0];
     }
 
-    evaluate(solution: TMatching): void {
+    evaluate(solution: TMatching): string[] {
+        const response: string[] = [];
+
         let graduateFirstChoice: number = 0;
         let graduateTop3: number = 0;
 
@@ -301,11 +303,13 @@ class GeneticMatching {
             }
         });
 
-        console.log(`Graduates with their first choice: ${graduateFirstChoice}/${this.graduatePreferences.length}`);
-        console.log(`Graduates with one of their top 3 choices: ${graduateTop3}/${this.graduatePreferences.length}`);
+        response.push(`Graduates with their first choice: ${graduateFirstChoice}/${this.graduatePreferences.length}`);
+        response.push(`Graduates with one of their top 3 choices: ${graduateTop3}/${this.graduatePreferences.length}`);
 
-        console.log(`Managers with their first choice: ${managerFirstChoice}/${this.placements.length}}`);
-        console.log(`Managers with one of their top 3 choices: ${managerTop3}/${this.placements.length}`);
+        response.push(`Managers with their first choice: ${managerFirstChoice}/${this.placements.length}}`);
+        response.push(`Managers with one of their top 3 choices: ${managerTop3}/${this.placements.length}`);
+
+        return response;
     }
 }
 

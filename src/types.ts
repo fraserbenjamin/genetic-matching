@@ -32,3 +32,10 @@ export interface IConfig {
     iterations: number;
     managerWeighting: number;
 }
+
+export interface ISolution {
+    solution: TMatching;
+    fitness?: number;
+    evaluation?: string[];
+    managerWeighting?: number;
+}

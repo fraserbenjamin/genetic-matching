@@ -291,12 +291,11 @@ onmessage = (e) => {
 
     switch (type) {
         case "init":
-            const { graduatePreferences, placements } = payload;
-            gm = new GeneticMatching(graduatePreferences, placements);
+            // const { graduatePreferences, placements } = payload;
             break;
         case "run":
-            if (!gm) break;
-            const { iterations, populationSize, managerWeighting } = payload;
+            const { iterations, populationSize, managerWeighting, graduatePreferences, placements } = payload;
+            gm = new GeneticMatching(graduatePreferences, placements);
 
             if(managerWeighting) gm.setManagerWeighting(managerWeighting);
 

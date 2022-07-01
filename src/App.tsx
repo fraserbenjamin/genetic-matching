@@ -15,13 +15,44 @@ const App = () => {
     managerWeighting: 50,
   });
   const [solution, setSolution] = useState<null | ISolution>(null);
-  const webWorker = React.useRef<Worker>(new window.Worker("genetic-worker.js")).current;
+  // const webWorker = React.useRef<Worker | null>(null);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   webWorker.current.onmessage = (e) => {
+  //     switch (e.data.type) {
+  //       case "progress":
+  //         console.log({ progress: e.data.payload })
+  //         // setProgress(e.data.payload);
+  //         break;
+  //       case "result":
+  //         console.log(e.data.payload);
+  //         setSolution(e.data.payload);
+  //         break;
+  //       default:
+  //         console.log(e.data);
+  //     }
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  // useEffect(() => {
+  //   webWorker.postMessage({
+  //     type: "init",
+  //     payload: {
+  //       graduatePreferences,
+  //       placements: placementsImport,
+  //     },
+  //   });
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [graduatePreferences, placementsImport]);
+
+  const run = useCallback(() => {
+    const webWorker: Worker = new window.Worker("genetic-worker.js");
+    console.log(webWorker);
     webWorker.onmessage = (e) => {
       switch (e.data.type) {
         case "progress":
-          console.log({ progress: e.data.payload })
           setProgress(e.data.payload);
           break;
         case "result":
@@ -32,25 +63,12 @@ const App = () => {
           console.log(e.data);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  useEffect(() => {
-    webWorker.postMessage({
-      type: "init",
-      payload: {
-        graduatePreferences,
-        placements: placementsImport,
-      },
-    });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [graduatePreferences, placementsImport]);
-
-  const run = useCallback(() => {
     webWorker.postMessage({
       type: "run",
       payload: {
+        graduatePreferences,
+        placements: placementsImport,
         iterations: config.iterations,
         populationSize: config.populationSize,
         managerWeighting: config.managerWeighting,

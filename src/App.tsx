@@ -8,7 +8,7 @@ const App = () => {
   const [placements, setPlacements] = React.useState<IPreview | null>(null);
   const [progress, setProgress] = React.useState<number>(0);
   const [config, setConfig] = React.useState<IConfig>({
-    populationSize: 100,
+    populationSize: 1000,
     iterations: 1000,
     managerWeighting: 50,
   });
@@ -49,6 +49,7 @@ const App = () => {
           setProgress(e.data.payload);
           break;
         case "result":
+          console.log({ solutionFitness: e.data.payload.fitness });
           setSolution(e.data.payload);
           break;
         default:
@@ -80,10 +81,14 @@ const App = () => {
 
         <Config config={config} setConfig={setConfig} />
 
-        <button type="button" onClick={run} className="text-white bg-green-700 hover:bg-green-800 disabled:bg-green-400 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+        <button
+          type="button"
+          onClick={run}
+          disabled={graduates === null || placements === null}
+          className="text-white bg-green-700 hover:bg-green-800 disabled:bg-green-400 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        >
           {progress > 0 ? `${progress}%` : "Run"}
         </button>
-        {/* <button type="button" onClick={run} disabled={graduates === null || placements === null} className="text-white bg-green-700 hover:bg-green-800 disabled:bg-green-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Run</button> */}
 
         {solution ? (
           <div>

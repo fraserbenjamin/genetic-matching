@@ -16,21 +16,18 @@ const UploadSpreadsheet: React.FC<IProps> = ({ onLoad, onClose }) => {
             const file = event.target.files[0];
 
             readFile(file).then(data => {
-                console.log(data);
                 setPreview(data);
             });
         }
     }
 
     const handleDrop = (event: DragEvent<HTMLLabelElement>) => {
-        console.log("drop")
-        console.log(event)
         event.preventDefault();
+
         Array.from(event.dataTransfer.items).forEach((item: DataTransferItem) => {
             if (item.kind === 'file') {
                 const file = item.getAsFile();
-                if(file) readFile(file).then(data => {
-                    console.log(data);
+                if (file) readFile(file).then(data => {
                     setPreview(data);
                 });
             }

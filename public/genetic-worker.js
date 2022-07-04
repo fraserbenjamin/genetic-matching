@@ -194,6 +194,7 @@ class GeneticMatching {
             },
         ];
     }
+
     // Randomly swap two of the placements in the solution
     mutation(chromosome) {
         const solution = chromosome.solution;
@@ -207,6 +208,7 @@ class GeneticMatching {
             fitness: this.calculateFitness(solution),
         };
     }
+
     run(iterations, populationSize) {
         if (!populationSize)
             populationSize = 10;
@@ -238,7 +240,7 @@ class GeneticMatching {
             let choice2 = this.select(sortedPopulation);
             while (newPopulation.length < populationSize) {
                 // Crossover
-                if (Math.random() < 0.3) {
+                if (Math.random() < 0.7) {
                     const crossoverResult = this.crossover(choice1, choice2);
                     choice1 = crossoverResult[0];
                     choice2 = crossoverResult[1];

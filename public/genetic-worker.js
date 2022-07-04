@@ -278,7 +278,7 @@ class GeneticMatching {
         });
         response.push(`Graduates with their first choice: ${graduateFirstChoice}/${this.graduatePreferences.length}`);
         response.push(`Graduates with one of their top 3 choices: ${graduateTop3}/${this.graduatePreferences.length}`);
-        response.push(`Managers with their first choice: ${managerFirstChoice}/${this.placements.length}}`);
+        response.push(`Managers with their first choice: ${managerFirstChoice}/${this.placements.length}`);
         response.push(`Managers with one of their top 3 choices: ${managerTop3}/${this.placements.length}`);
         return response;
     }
@@ -290,9 +290,6 @@ onmessage = (e) => {
     const { type, payload } = e.data;
 
     switch (type) {
-        case "init":
-            // const { graduatePreferences, placements } = payload;
-            break;
         case "run":
             const { iterations, populationSize, managerWeighting, graduatePreferences, placements } = payload;
             gm = new GeneticMatching(graduatePreferences, placements);

@@ -1,9 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { graduatePreferences, placements as placementsImport } from "./common/app";
-import GeneticMatching from "./common/geneticMatching";
+import React, { useCallback, useState } from "react";
 import Config from "./components/Config";
 import PreferenceUpload from "./components/PreferenceUpload";
-import { IChromosome, IConfig, IGraduatePreference, IPreview, ISolution, TMatching } from "./types";
+import { IConfig, IGraduatePreference, IPlacement, IPreview, ISolution } from "./types";
 
 const App = () => {
   const [graduates, setGraduates] = React.useState<IPreview | null>(null);
@@ -15,48 +13,42 @@ const App = () => {
     managerWeighting: 50,
   });
   const [solution, setSolution] = useState<null | ISolution>(null);
-  // const webWorker = React.useRef<Worker | null>(null);
 
-  // useEffect(() => {
-  //   webWorker.current.onmessage = (e) => {
-  //     switch (e.data.type) {
-  //       case "progress":
-  //         console.log({ progress: e.data.payload })
-  //         // setProgress(e.data.payload);
-  //         break;
-  //       case "result":
-  //         console.log(e.data.payload);
-  //         setSolution(e.data.payload);
-  //         break;
-  //       default:
-  //         console.log(e.data);
-  //     }
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  const formattedGraduates: IGraduatePreference[] = React.useMemo(() => {
+    if (!graduates) return [];
 
-  // useEffect(() => {
-  //   webWorker.postMessage({
-  //     type: "init",
-  //     payload: {
-  //       graduatePreferences,
-  //       placements: placementsImport,
-  //     },
-  //   });
+    const rows = graduates.csv.split("\n").slice(1);
+    return rows.map((row: string) => {
+      const cells = row.split(",");
+      return {
+        id: parseInt(cells[0].replace(/\D/g, "")),
+        placementRankings: cells.slice(1).map((cell: string) => parseInt(cell.replace(/\D/g, ""))),
+      };
+    });
+  }, [graduates]);
 
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [graduatePreferences, placementsImport]);
+  const formattedPlacements: IPlacement[] = React.useMemo(() => {
+    if (!placements) return [];
+
+    const rows = placements.csv.split("\n").slice(1);
+    return rows.map((row: string) => {
+      const cells = row.split(",");
+      return {
+        id: parseInt(cells[0].replace(/\D/g, "")),
+        quota: parseInt(cells[1].replace(/\D/g, "")),
+        graduateRankings: cells.slice(2).map((cell: string) => parseInt(cell.replace(/\D/g, ""))),
+      };
+    });
+  }, [placements]);
 
   const run = useCallback(() => {
     const webWorker: Worker = new window.Worker("genetic-worker.js");
-    console.log(webWorker);
     webWorker.onmessage = (e) => {
       switch (e.data.type) {
         case "progress":
           setProgress(e.data.payload);
           break;
         case "result":
-          console.log(e.data.payload);
           setSolution(e.data.payload);
           break;
         default:
@@ -67,29 +59,13 @@ const App = () => {
     webWorker.postMessage({
       type: "run",
       payload: {
-        graduatePreferences,
-        placements: placementsImport,
+        graduatePreferences: formattedGraduates,
+        placements: formattedPlacements,
         iterations: config.iterations,
         populationSize: config.populationSize,
         managerWeighting: config.managerWeighting,
       },
     });
-
-    // if (!graduates || !placements) return;
-    // const gradPrefs: IGraduatePreference[] = graduates.json.map((row: any) => ({
-    //   id: parseInt(row.Grad),
-    //   placementRankings: 
-    // }));
-
-    // const gm = new GeneticMatching(graduatePreferences, placementsImport);
-    // gm.setManagerWeighting(config.managerWeighting);
-    // const matchings: IChromosome = gm.run(config.iterations, config.populationSize, setProgress);
-
-    // setSolution({
-    //   solution: matchings.solution,
-    //   evaluation: gm.evaluate(matchings.solution),
-    //   managerWeighting: config.managerWeighting,
-    // });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [graduates, placements, config]);
@@ -120,9 +96,11 @@ const App = () => {
 
             <h2 className="text-xl p-3 font-medium">Evaluation</h2>
             <p className="flex flex-col bg-gray-200 rounded-lg py-3 px-5 mx-3">
-              {Array.isArray(solution?.evaluation) ? solution.evaluation.map((item: string, i: number) => (
-                <span key={i}>{item}</span>
-              )) : null}
+              {Array.isArray(solution?.evaluation) ?
+                solution.evaluation.map((item: string, i: number) => (
+                  <span key={i}>{item}</span>
+                ))
+                : null}
             </p>
           </div>
         ) : null}
